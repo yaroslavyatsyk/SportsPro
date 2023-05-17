@@ -1,0 +1,104 @@
+﻿@model IEnumerable<SportsPro.Models.Incident>
+
+@{
+    ViewData["Title"] = "Incident Management";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<ul class="nav nav-pills">
+    <li class="nav-item">
+        @Html.ActionLink("All Incidents", "Index","Incidents",new {search = "All"}, new {@class = "nav-link"})
+    </li>
+    <li class="nav-item">
+        @Html.ActionLink("Opened", "Index","Incidents",new {search = "Opened"}, new {@class = "nav-link"})
+    </li>
+    <li class="nav-item">
+        @Html.ActionLink("UnAssigned", "Index","Incidents",new {search = "UnAssigned"}, new {@class = "nav-link"})
+    </li>
+</ul>
+
+<br />
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New</a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOpened)
+            </th>
+           <th>
+                @Html.DisplayNameFor(model => model.DateClosed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Technician)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOpened)
+                </td>
+                @if (item.DateClosed != null)
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateClosed)
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        N/A
+                    </td>
+                }
+                @if (item.Technician != null)
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Technician.FullName)
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        Unassigned 
+                    </td>
+                }
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.IncidentId">Edit</a> |
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.IncidentId">Details</a> |
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.IncidentId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
