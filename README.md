@@ -1,14 +1,12 @@
 # SportsPro
 
-The CRUD-based web application build on ASP.NET MVC technology, demonstrates the concept of usage of management system for specific purposes.
-It contains CRUD operations for the following features:
+# SportsPro
+The CRUD-based web application built on ASP.NET MVC technology, demonstrates the concept of usage of management systems for specific purposes. It contains CRUD operations for the following features:
 * Products
 * Customers
 * Technicians
 * Incidents
 * Registrations (Assigning a specific product to a specific customer)
-
-Below, you can see some screens of demo.
 
 1. Home Screen
 ![image](https://github.com/yaroslavyatsyk/SportsPro/assets/31794068/f431a0f7-7f37-4de4-8a49-3a3bdbc81eae)
@@ -23,7 +21,7 @@ Below, you can see some screens of demo.
 6. Delete Product Page
 ![image](https://github.com/yaroslavyatsyk/SportsPro/assets/31794068/d95b9ca5-9481-4c72-b9fc-5ab9e4905b73)
 
-For customers, technicians, incidents, and registrations, pages with CRUD operations are the same.
+For customers, technicians, incidents, registrations, pages, and CRUD operations are the same.
 
 In future authorization, and authentification features will be added, and further improvements will be done.
 
