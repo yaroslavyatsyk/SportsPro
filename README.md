@@ -25,3 +25,5 @@ Below, you can see some screens of demo.
 
 For customers, technicians, incidents, and registrations, pages with CRUD operations are the same.
 
+In future authorization, and authentification features will be added, and further improvements will be done.
+
