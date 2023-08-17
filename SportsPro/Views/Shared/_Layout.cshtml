@@ -26,43 +26,51 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" >
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link
-                        @(controller == "Home" && action == "Index" ? "active" : "")"
-                               asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link
-                        @(controller == "Products" && action == "Index" ? "active" : "")"
-                               asp-controller="Products" asp-action="Index">Products</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link
-                        @(controller == "Technicians" && action == "Index" ? "active" : "")"
-                               asp-controller="Technicians" asp-action="Index">Technicians</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link
-                        @(controller == "Customers" && action == "Index" ? "active" : "")"
-                               asp-controller="Customers" asp-action="Index">Customers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link
-                        @(controller == "Incidents" && action == "Index/?search=All" ? "active" : "")"
-                               asp-controller="Incidents" asp-action="Index">Incidents</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link
-                        @(controller == "Registrations" && action == "Index" ? "active" : "")"
-                               asp-controller="Registrations" asp-action="Index">Registration</a>
-                        </li>
+
                     
-                    </ul>
+                    <ul class="navbar-nav flex-grow-1">
+
+                      
+                            <li class="nav-item">
+                                <a class="nav-link
+                        @(controller == "Home" && action == "Index" ? "active" : "")"
+                                asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link
+                        @(controller == "Products" && action == "Index" ? "active" : "")"
+                                asp-controller="Products" asp-action="Index">Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link
+                        @(controller == "Technicians" && action == "Index" ? "active" : "")"
+                                asp-controller="Technicians" asp-action="Index">Technicians</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link
+                        @(controller == "Customers" && action == "Index" ? "active" : "")"
+                                asp-controller="Customers" asp-action="Index">Customers</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link
+                        @(controller == "Incidents" && action == "Index/?search=All" ? "active" : "")"
+                                asp-controller="Incidents" asp-action="Index">Incidents</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link
+                        @(controller == "Registrations" && action == "Index" ? "active" : "")"
+                                asp-controller="Registrations" asp-action="Index">Registration</a>
+                            </li>
+
+</ul>
                     <div class="navbar-nav navbar-right">
-                       <a class="nav-link
+                        <a class="nav-link
                         @(controller == "Home" && action == "About" ? "active" : "")"
-                               asp-controller="Home" asp-action="About">About</a>
+                           asp-controller="Home" asp-action="About">About</a>
+
+
+
+
                     </div>
                 </div>
             </div>
