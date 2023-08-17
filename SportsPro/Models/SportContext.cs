@@ -17,7 +17,7 @@ namespace SportsPro.Models
 
         public DbSet<Registration> Registrations { get; set; }
 
-        public DbSet<User> Users { get; set; }
+      
 
        
     }
