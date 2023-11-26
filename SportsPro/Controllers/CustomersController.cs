@@ -50,6 +50,8 @@ namespace SportsPro.Controllers
         {
             List<string> countriesList = getCountries();
             ViewBag.Countries = countriesList;
+
+            
            
             return View();
         }
@@ -174,7 +176,7 @@ namespace SportsPro.Controllers
             listOfCountries.Sort();
             return listOfCountries;
         }
-
+       
 
 
     }
