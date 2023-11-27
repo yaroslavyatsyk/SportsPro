@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+
 }
 
 <h1>Create</h1>
@@ -47,11 +48,11 @@
                 <div class="form-group">
                     <label asp-for="State" class="control-label"></label>
                    
-                    <input asp-for="State" class="form-control">
+                    <select asp-for="State" class="form-control">
                         
 
 
-                    </input>
+                    </select>
                     <span asp-validation-for="State" class="text-danger"></span>
                 </div>
                 
@@ -78,5 +79,62 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            // Get the country and state dropdown elements
+            var countryDropdown = $('#Country');
+            var stateDropdown = $('#State');
+
+            // Define the states for Canada
+            
+            var provinces = ['Alberta',
+        'British Columbia',
+                'Manitoba',
+                'New Brunswick',
+                'Newfoundland and Labrador',
+                'Nova Scotia',
+                'Ontario',
+                'Prince Edward Island',
+                'Quebec',
+                'Saskatchewan',
+                'Northwest Territories',
+                'Nunavut',
+                'Yukon'
+            ];
+
+            // Event handler for country dropdown change
+            countryDropdown.change(function () {
+                var selectedCountry = countryDropdown.val();
+                updateStateDropdown(selectedCountry);
+            });
+
+            // Function to update the state dropdown based on the selected country
+            function updateStateDropdown(selectedCountry) {
+                // Clear the current options
+                stateDropdown.empty();
+
+                // Check if the selected country is Canada
+                if (selectedCountry === 'Canada') {
+                    // Add the provinces of Canada to the state dropdown
+                    $.each(provinces, function (index, province) {
+                        stateDropdown.append($('<option>', {
+                            value: province,
+                            text: province
+                        }));
+                    });
+                } else {
+                    // Handle other countries here
+                    // Add code to fetch and populate states for other countries if needed
+
+
+                }
+            }
+
+            // Initial setup based on the selected country
+            var initialCountry = countryDropdown.val();
+            updateStateDropdown(initialCountry);
+        });
+    </script>
+
 
 }
