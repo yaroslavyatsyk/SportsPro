@@ -73,7 +73,7 @@ namespace SportsPro.Controllers
             {
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
-                ViewData["Message"] = "Customer has been added successfully";
+                TempData["Message"] = "Customer has been added successfully";
                 return RedirectToAction(nameof(Index));
             }
          
@@ -130,7 +130,7 @@ namespace SportsPro.Controllers
                         throw;
                     }
                 }
-                ViewData["Message"] = "Customer has been updated successfully";
+                TempData["Message"] = "Customer has been updated successfully";
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
@@ -162,7 +162,7 @@ namespace SportsPro.Controllers
             var customer = await _context.Customers.FindAsync(id);
             _context.Customers.Remove(customer);
             await _context.SaveChangesAsync();
-            ViewData["Message"] = "Customer has been deleted successfully";
+            TempData["Message"] = "Customer has been deleted successfully";
             return RedirectToAction(nameof(Index));
         }
 
