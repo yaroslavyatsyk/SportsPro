@@ -23,5 +23,5 @@ The CRUD-based web application built on ASP.NET MVC technology, demonstrates the
 
 For customers, technicians, incidents, registrations, pages, and CRUD operations are the same.
 
-In future authorization, and authentification features will be added, and further improvements will be done.
+In future, will be added new features.
 
