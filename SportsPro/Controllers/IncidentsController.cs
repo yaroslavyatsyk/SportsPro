@@ -20,28 +20,33 @@ namespace SportsPro.Controllers
         }
 
         // GET: Incidents
-        public async Task<IActionResult> Index(string search = "All")
+        public async Task<IActionResult> Index(string filtering = "")
         {
-            var sportContext = _context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
+            var sportContext = await _context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
 
             
 
+            
 
-                if (search == "All")
-                {
-                    sportContext = _context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
-                }
-                if(search == "Opened")
-                {
-                    sportContext = _context.Incidents.Where(i => i.DateClosed == null).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
-                }
-                if(search == "UnAssigned")
-                {
-                    sportContext = _context.Incidents.Where(i => i.Technician == null).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
-                }
+               switch (filtering)
+            {
+
+                case "Unassigned":
+                    sportContext = await _context.Incidents.Where(i => i.TechnicianId == null).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                    break;
+                case "Opened":
+
+                    sportContext = await _context.Incidents.Where(i => i.DateClosed == null).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                    break;
+
+                    default:
+                    sportContext = await _context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                    break;
+
+            }
 
 
-            return View(await sportContext.ToListAsync());
+            return View(sportContext);
         }
        
        

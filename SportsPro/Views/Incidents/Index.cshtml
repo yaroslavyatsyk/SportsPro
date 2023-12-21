@@ -6,17 +6,21 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<ul class="nav nav-pills">
-    <li class="nav-item">
-        @Html.ActionLink("All Incidents", "Index","Incidents",new {search = "All"}, new {@class = "nav-link"})
-    </li>
-    <li class="nav-item">
-        @Html.ActionLink("Opened", "Index","Incidents",new {search = "Opened"}, new {@class = "nav-link"})
-    </li>
-    <li class="nav-item">
-        @Html.ActionLink("UnAssigned", "Index","Incidents",new {search = "UnAssigned"}, new {@class = "nav-link"})
-    </li>
-</ul>
+<form method="get">
+    <div class="form-group">
+<label for="filter">Filter Incidents</label>
+       <select id="filter" name="filtering">
+
+ 
+            <option value="Unassigned">Unassigned</option>
+<option value="Opened">Opened</option>
+
+       </select>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Apply" />
+</form>
+
+
 
 <br />
 <p>
@@ -35,10 +39,10 @@
                 @Html.DisplayNameFor(model => model.Customer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateOpened)
+               Opened Date
             </th>
            <th>
-                @Html.DisplayNameFor(model => model.DateClosed)
+                Closed Date
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Technician)

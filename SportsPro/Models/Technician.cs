@@ -23,7 +23,14 @@ namespace SportsPro.Models
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
         public string? Phone { get; set; }
 
-        public string FullName => FirstName?.Replace(' ', '-') + " " + LastName?.Replace(' ', '-');
+        public string FullName
+        {
+            get
+            {
+
+                return FirstName + " " + LastName;
+            }
+        }
 
     }
 }
