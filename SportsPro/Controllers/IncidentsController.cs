@@ -39,6 +39,10 @@ namespace SportsPro.Controllers
                     sportContext = await _context.Incidents.Where(i => i.DateClosed == null).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
                     break;
 
+                    case "Resolved":
+                        sportContext = await _context.Incidents.Where(i => i.DateClosed != null).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                        break;
+
                     default:
                     sportContext = await _context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
                     break;
