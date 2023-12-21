@@ -11,20 +11,121 @@
     <div class="alert-info">@TempData["message"]</div>
 }
 
+<br />
 <p>
     <a class="btn btn-primary" asp-action="Create">Add Product</a>
 </p>
+
+<form method="get">
+    <div class="form-group">
+        <label for="search">Search Products</label>
+
+        <input type="text" class="form-control" id="search" name="search" placeholder="Search">
+
+
+    </div>
+
+
+    <div class="form-group">
+        <label>Sort by:</label>
+        
+        <div class="form-check">
+        <input type="radio" id="SortByNameAsc" name="sortBy" value="name_asc" @(ViewBag.CurrSort == "name_asc" ? "checked" : "")/>
+<label for="SortByNameAsc">Name (A-Z)</label>
+        </div>
+
+
+        <div class="form-check">
+            <input type="radio" id="SortByNameDesc" name="sortBy" value="name_desc" @(ViewBag.CurrSort == "name_desc" ? "checked" : "") />
+
+
+<label for="SortByNameDesc">Name (Z-A)</label>
+
+        </div>
+
+<div class="form-check">
+            <input type="radio" id="SortByPriceAsc" name="sortBy" value="price_asc" @(ViewBag.CurrSort == "price_asc" ? "checked" : "") />
+<label for="SortByPriceAsc">Price (Low to High)</label>
+
+</div>
+
+<div class="form-check">
+
+            <input type="radio" id="SortByPriceDesc" name="sortBy" value="price_desc" @(ViewBag.CurrSort == "price_desc" ? "checked" : "") />
+
+<label for="SortByPriceDesc">Price (High to Low)</label>
+
+</div>
+
+<div class="form-check">
+
+            <input type="radio" id="SortByReleaseDateAsc" name="sortBy" value="release_asc" @(ViewBag.CurrSort == "release_asc" ? "checked" : "") />
+
+<label for="SortByReleaseDateAsc">Release Date (Old to New)</label>
+</div>
+
+<div class="form-check">
+            <input type="radio" id="SortByReleaseDateDesc" name="sortBy" value="release_desc" @(ViewBag.CurrSort == "release_desc" ? "checked" : "") />
+
+<label for="SortByReleaseDateDesc">Release Date (New to Old)</label>
+
+</div>
+
+<div class="form-check">
+
+<input type="radio" id="SortByProductCodeAsc" name="sortBy" value="code_asc" @( ViewBag.CurrSort == "code_asc" ? "checked" : "")/>
+
+<label for="SortByProductCodeAsc">Product Code (A-Z)</label>
+
+
+</div>
+
+<div class="form-check">
+
+            <input type="radio" id="SortByProductCodeDesc" name="sortBy" value="code_desc" @(ViewBag.CurrSort == "code_desc" ? "checked" : "") />
+
+<label for="SortByProductCodeDesc">Product Code (Z-A)</label>
+
+</div>
+
+
+
+      
+
+
+    <br />
+
+    <input type="submit" class="btn btn-primary" value="Apply"></input>
+
+
+
+
+
+
+</form>
+
+<br />
+
+
+
+
+
+
+</div>
+
+<br />
+
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProductCode)
+                Product Code
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReleaseDate)
+                Release Date
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Price)
@@ -49,8 +150,8 @@
                     $@Html.DisplayFor(modelItem => item.Price)
                 </td>
                 <td>
-                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> 
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@item.ProductId">Details</a> 
                     <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
                 </td>
             </tr>

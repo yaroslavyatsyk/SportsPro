@@ -20,9 +20,57 @@ namespace SportsPro.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortBy = "", string search = "")
         {
-            return View(await _context.Products.ToListAsync());
+
+
+            var products = await _context.Products.ToListAsync();
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                products = products.Where(p => p.Name.ToLower().Contains(search)).ToList();
+
+                return View(products);
+            }
+
+
+            if (!String.IsNullOrEmpty(sortBy))
+            {
+                switch (sortBy)
+                {
+                    case "name_asc":
+                        products = products.OrderBy(p => p.Name).ToList();
+                        break;
+                    case "name_desc":
+                        products = products.OrderByDescending(p => p.Name).ToList();
+                        break;
+                    case "price_asc":
+                        products = products.OrderBy(p => p.Price).ToList();
+                        break;
+                    case "price_desc":
+                        products = products.OrderByDescending(p => p.Price).ToList();
+                        break;
+                    case "release_asc":
+                        products = products.OrderBy(p => p.ReleaseDate).ToList();
+                        break;
+
+                    case "release_desc":
+                        products = products.OrderByDescending(p => p.ReleaseDate).ToList();
+                        break;
+
+                    case "code_asc":
+                        products = products.OrderBy(p => p.ProductCode).ToList();
+                        break;
+
+                    case "code_desc":
+                        products = products.OrderByDescending(p => p.ProductCode).ToList();
+                        break;
+                }
+            
+
+                
+            }
+            return View(products);
         }
 
         // GET: Products/Details/5
