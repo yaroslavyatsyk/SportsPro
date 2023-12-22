@@ -17,8 +17,36 @@
 <option value="Resolved">Resolved</option>
 
        </select>
+
+
     </div>
     <input type="submit" class="btn btn-primary" value="Apply" />
+</form>
+
+<br/>
+
+<form method="get">
+    <div class="form-group">
+        <label for="sort">Sort Incidents by:</label>
+<select id="sort" name="sorting">
+            <option value="Title (A-Z)">Title (A-Z)</option>
+<option value="Customer (A-Z)">Customer (A-Z)</option>
+<option value="Product (A-Z)">Product (A-Z)</option>
+<option value="DateOpened (A-Z)">Date Opened (A-Z)</option>
+<option value="DateClosed (A-Z)">Date Closed (A-Z)</option>
+<option value="Technician (A-Z)">Technician (A-Z)</option>
+<option value="Title (Z-A)">Title (Z-A)</option>
+<option value="Customer (Z-A)">Customer (Z-A)</option>
+<option value="Product (Z-A)">Product (Z-A)</option>
+<option value="DateOpened (Z-A)">Date Opened (Z-A)</option>
+<option value="DateClosed (Z-A)">Date Closed (Z-A)</option>
+<option value="Technician (Z-A)">Technician (Z-A)</option>
+            
+            </select>
+    </div>
+
+    <br />
+<input type="submit" class="btn btn-primary" value="Apply" />
 </form>
 
 
@@ -62,10 +90,10 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Customer.FullName)
+                    @Html.DisplayFor(modelItem => item.Product.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Product.Name)
+                    @Html.DisplayFor(modelItem => item.Customer.FullName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DateOpened)

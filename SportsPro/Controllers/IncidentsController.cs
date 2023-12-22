@@ -20,7 +20,7 @@ namespace SportsPro.Controllers
         }
 
         // GET: Incidents
-        public async Task<IActionResult> Index(string filtering = "")
+        public async Task<IActionResult> Index(string filtering = "", string sorting = "")
         {
             var sportContext = await _context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
 
@@ -48,6 +48,61 @@ namespace SportsPro.Controllers
                     break;
 
             }
+
+            if (!string.IsNullOrEmpty(sorting))
+            {
+                switch (sorting)
+                {
+                    case "Customer (A-Z)":
+
+                        sportContext = await _context.Incidents.OrderBy(i => i.Customer).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                        break;
+                        case "Customer (Z-A)":
+                            sportContext = await _context.Incidents.OrderByDescending(i => i.Customer).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                            break;
+                    case "Product (A-Z)":
+
+                        sportContext = await _context.Incidents.OrderBy(i => i.Product.Name).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                        break;
+                        case "Product (Z-A)":
+                            sportContext = await _context.Incidents.OrderByDescending(i => i.Product.Name).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                            break;
+                    case "Technician (A-Z)":
+                        sportContext = await _context.Incidents.OrderBy(i => i.Technician).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                        break;
+                        case "Technician (Z-A)":
+                            sportContext = await _context.Incidents.OrderByDescending(i => i.Technician).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                            break;
+                    case "DateOpened (A-Z)":
+                        sportContext = await _context.Incidents.OrderBy(i => i.DateOpened).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                        break;
+                        case "DateOpened (Z-A)":
+                            sportContext = await _context.Incidents.OrderByDescending(i => i.DateOpened).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                            break;
+                    case "DateClosed (A-Z)":
+                        sportContext = await _context.Incidents.OrderBy(i => i.DateClosed).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                        break;
+                        case "DateClosed (Z-A)":
+                            sportContext = await _context.Incidents.OrderByDescending(i => i.DateClosed).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                            break;
+                    case "Title (A-Z)":
+                        sportContext = await _context.Incidents.OrderBy(i => i.Title).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                        break;
+                        case "Title (Z-A)":
+                            sportContext = await _context.Incidents.OrderByDescending(i => i.Title).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).ToListAsync();
+                            break;
+
+                }
+
+                
+
+
+
+
+                return View(sportContext);
+            }
+
+
 
 
             return View(sportContext);
