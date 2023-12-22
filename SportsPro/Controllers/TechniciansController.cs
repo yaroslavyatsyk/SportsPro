@@ -60,6 +60,7 @@ namespace SportsPro.Controllers
             {
                 _context.Add(technician);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Technician has been added successfully!";
                 return RedirectToAction(nameof(Index));
             }
             return View(technician);
@@ -98,6 +99,7 @@ namespace SportsPro.Controllers
                 try
                 {
                     _context.Update(technician);
+                    TempData["Message"] = "Technician has been updated successfully!";
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -142,6 +144,7 @@ namespace SportsPro.Controllers
             var technician = await _context.Technicianes.FindAsync(id);
             _context.Technicianes.Remove(technician);
             await _context.SaveChangesAsync();
+            TempData["Message"] = "Technician has been deleted successfully!";
             return RedirectToAction(nameof(Index));
         }
 

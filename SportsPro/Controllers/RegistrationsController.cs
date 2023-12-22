@@ -51,6 +51,7 @@ namespace SportsPro.Controllers
         {
             ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "FullName");
             ViewData["ProductId"] = new SelectList(_context.Products, "ProductId", "Name");
+
             return View();
         }
 
@@ -65,6 +66,7 @@ namespace SportsPro.Controllers
             {
                 _context.Add(registration);
                 await _context.SaveChangesAsync();
+                TempData["Message"] = "Successfully registered product!";
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "FullName", registration.CustomerId);
@@ -107,6 +109,7 @@ namespace SportsPro.Controllers
                 try
                 {
                     _context.Update(registration);
+                    TempData["Message"] = "Successfully updated registration!";
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -155,6 +158,7 @@ namespace SportsPro.Controllers
             var registration = await _context.Registrations.FindAsync(id);
             _context.Registrations.Remove(registration);
             await _context.SaveChangesAsync();
+            TempData["Message"] = "Successfully deleted registration!";
             return RedirectToAction(nameof(Index));
         }
 
