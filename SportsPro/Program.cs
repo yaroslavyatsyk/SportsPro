@@ -12,7 +12,7 @@ builder.Services.AddRouting(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<SportContext>(options =>
+builder.Services.AddDbContextPool<SportContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("SportContext"));
 }
