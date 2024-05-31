@@ -67,29 +67,46 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script>
         $(document).ready(function () {
             // Get the country and state dropdown elements
             var countryDropdown = $('#Country');
             var stateDropdown = $('#State');
+            var stateLabel = $('#stateId');
 
-            // Define the states for Canada
+            // Define the states/provinces/oblasts
+            var provinces = [
+                'Alberta', 'British Columbia', 'Manitoba', 'New Brunswick',
+                'Newfoundland and Labrador', 'Nova Scotia', 'Ontario',
+                'Prince Edward Island', 'Quebec', 'Saskatchewan',
+                'Northwest Territories', 'Nunavut', 'Yukon'
+            ];
 
-            var provinces = ['Alberta',
-                'British Columbia',
-                'Manitoba',
-                'New Brunswick',
-                'Newfoundland and Labrador',
-                'Nova Scotia',
-                'Ontario',
-                'Prince Edward Island',
-                'Quebec',
-                'Saskatchewan',
-                'Northwest Territories',
-                'Nunavut',
-                'Yukon'
+            var states = [
+                'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
+                'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia',
+                'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas',
+                'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts',
+                'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana',
+                'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico',
+                'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma',
+                'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina',
+                'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+                'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+            ];
+
+            var oblasts = [
+                'Cherkasy Oblast', 'Chernihiv Oblast', 'Chernivtsi Oblast',
+                'Dnipropetrovsk Oblast', 'Donetsk Oblast', 'Ivano-Frankivsk Oblast',
+                'Kharkiv Oblast', 'Kherson Oblast', 'Khmelnytskyi Oblast',
+                'Kyiv Oblast', 'Kirovohrad Oblast', 'Luhansk Oblast', 'Lviv Oblast',
+                'Mykolaiv Oblast', 'Odessa Oblast', 'Poltava Oblast', 'Rivne Oblast',
+                'Sumy Oblast', 'Ternopil Oblast', 'Vinnytsia Oblast', 'Volyn Oblast',
+                'Zakarpattia Oblast', 'Zaporizhia Oblast', 'Zhytomyr Oblast',
+                'Autonomous Republic of Crimea'
             ];
 
             // Event handler for country dropdown change
@@ -103,79 +120,30 @@
                 // Clear the current options
                 stateDropdown.empty();
 
-                // Check if the selected country is Canada
                 if (selectedCountry === 'Canada') {
-                    // Add the provinces of Canada to the state dropdown
+                    stateLabel.text("Province");
                     $.each(provinces, function (index, province) {
                         stateDropdown.append($('<option>', {
                             value: province,
                             text: province
                         }));
                     });
-                } else if(selectedCountry === "United States") {
-                    // Handle other countries here
-                    // Add code to fetch and populate states for other countries if needed
-
-                    var states = ['Alabama',
-                        'Alaska',
-                        'Arizona',
-                        'Arkansas',
-                        'California',
-                        'Colorado',
-                        'Connecticut',
-                        'Delaware',
-                        'Florida',
-                        'Georgia',
-                        'Hawaii',
-                        'Idaho',
-                        'Illinois',
-                        'Indiana',
-                        'Iowa',
-                        'Kansas',
-                        'Kentucky',
-                        'Louisiana',
-                        'Maine',
-                        'Maryland',
-                        'Massachusetts',
-                        'Michigan',
-                        'Minnesota',
-                        'Mississippi',
-                        'Missouri',
-                        'Montana',
-                        'Nebraska',
-                        'Nevada',
-                        'New Hampshire',
-                        'New Jersey',
-                        'New Mexico',
-                        'New York',
-                        'North Carolina',
-                        'North Dakota',
-                        'Ohio',
-                        'Oklahoma',
-                        'Oregon',
-                        'Pennsylvania',
-                        'Rhode Island',
-                        'South Carolina',
-                        'South Dakota',
-                        'Tennessee',
-                        'Texas',
-                        'Utah',
-                        'Vermont',
-                        'Virginia',
-                        'Washington',
-                        'West Virginia',
-                        'Wisconsin',
-                        'Wyoming'
-                    ];
-
-$.each(states, function (index, state) {
+                } else if (selectedCountry === 'United States') {
+                    stateLabel.text("State");
+                    $.each(states, function (index, state) {
                         stateDropdown.append($('<option>', {
                             value: state,
                             text: state
                         }));
                     });
-
-
+                } else if (selectedCountry === 'Ukraine') {
+                    stateLabel.text("Oblast");
+                    $.each(oblasts, function (index, oblast) {
+                        stateDropdown.append($('<option>', {
+                            value: oblast,
+                            text: oblast
+                        }));
+                    });
                 }
             }
 
