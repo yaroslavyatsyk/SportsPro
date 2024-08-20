@@ -25,7 +25,7 @@ namespace SportsPro.Models
 
         [Required(ErrorMessage = "Please enter postal code.")]
         [DataType(DataType.PostalCode)]
-        [StringLength(20, MinimumLength = 1, ErrorMessage = "The First Name must have at least 1 character and not more than or equal 20")]
+        [StringLength(6, MinimumLength = 1, ErrorMessage = "The First Name must have at least 1 character and not more than or equal 6")]
         public string? PostalCode { get; set; }
 
         [Required(ErrorMessage = "Please enter country.")]

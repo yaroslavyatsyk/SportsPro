@@ -17,7 +17,9 @@ namespace SportsPro.Models
 		public DateTime ReleaseDate { get; set; }
 		
 		[Required(ErrorMessage = "Please enter the price")]
+		[Range(0.0,9999.99, ErrorMessage = "Price must be between 0.0 and 9999.99")]
 		public double Price { get; set; }
+
 		
 
 	}

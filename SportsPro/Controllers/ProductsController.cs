@@ -67,9 +67,15 @@ namespace SportsPro.Controllers
                         break;
                 }
             
-
+              
                 
             }
+
+
+
+            ViewBag.TotalProducts = products.Count;
+            ViewBag.TotalPrice = products.Sum(p => p.Price);
+
             return View(products);
         }
 
