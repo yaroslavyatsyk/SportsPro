@@ -96,14 +96,14 @@ namespace SportsPro.Controllers
 
                 
 
-
+               
 
 
                 return View(sportContext);
             }
 
 
-
+            ViewBag.TotalIncidents = sportContext.Count;
 
             return View(sportContext);
         }

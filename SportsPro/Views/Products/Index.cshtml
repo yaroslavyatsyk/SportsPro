@@ -114,7 +114,7 @@
 </div>
 
 <br />
-
+@if(Model.Count() != 0) {
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -158,6 +158,11 @@
         }
     </tbody>
 </table>
+}
+else
+{
+    <p>No products found</p>
+}
 
-<p>Total cost is @ViewBag.TotalSum</p>
-<p>Total number of products is @ViewBag.TotalAmount</p>
+<p>Total cost is @ViewBag.TotalPrice</p>
+<p>Total number of products is @ViewBag.TotalProducts</p>

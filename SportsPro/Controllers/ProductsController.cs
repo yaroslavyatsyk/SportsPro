@@ -28,7 +28,7 @@ namespace SportsPro.Controllers
 
             if (!String.IsNullOrEmpty(search))
             {
-                products = products.Where(p => p.Name.ToLower().Contains(search)).ToList();
+                products = products.Where(p => p.Name.Contains(search,StringComparison.OrdinalIgnoreCase)).ToList();
 
                 return View(products);
             }
