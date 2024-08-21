@@ -20,7 +20,7 @@ namespace SportsPro.Controllers
         }
 
         // GET: Technicians
-        public async Task<IActionResult> Index(string sortBy = "")
+        public async Task<IActionResult> Index(string sortBy = "", string search = "")
         {
 
             var technicianes = await _context.Technicianes.ToListAsync();
@@ -35,6 +35,12 @@ namespace SportsPro.Controllers
                     "LastNameDESC" => technicianes.OrderByDescending(t => t.LastName).ToList(),
                    
                 };
+            }
+
+            if(!String.IsNullOrEmpty(search))
+            {
+                technicianes = technicianes.Where(t => t.FirstName.Contains(search,StringComparison.OrdinalIgnoreCase) || t.LastName.Contains(search,StringComparison.OrdinalIgnoreCase)).ToList();
+               
             }
 
             ViewBag.TotalTechnicians = _context.Technicianes.Count();

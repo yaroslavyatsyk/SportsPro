@@ -26,6 +26,10 @@ else
 
     <form>
         <div class="class-group">
+            <input type = "search" id="search" name="search" placeholder="Find Technicianes by First/Last Name" />
+
+        </div>
+        <div class="class-group">
             <input type = "radio" id="SortByFirstNameASC" name="sortBy" value="FirstNameASC" @(ViewBag.CurrSort == "FirstNameASC" ? "checked" : "") />
             <label for="SortByFirstNameASC">First Name ASC</label>
         </div>
