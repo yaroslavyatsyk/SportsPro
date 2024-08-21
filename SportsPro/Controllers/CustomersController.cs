@@ -24,6 +24,7 @@ namespace SportsPro.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
+            ViewBag.TotalCustomers = _context.Customers.Count();
             return View(await _context.Customers.ToListAsync());
         }
 
