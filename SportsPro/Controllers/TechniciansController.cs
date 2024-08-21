@@ -22,6 +22,7 @@ namespace SportsPro.Controllers
         // GET: Technicians
         public async Task<IActionResult> Index()
         {
+            ViewBag.TotalTechnicians = _context.Technicianes.Count();
             return View(await _context.Technicianes.ToListAsync());
         }
 
