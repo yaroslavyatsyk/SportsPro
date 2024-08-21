@@ -20,10 +20,26 @@ namespace SportsPro.Controllers
         }
 
         // GET: Technicians
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortBy = "")
         {
+
+            var technicianes = await _context.Technicianes.ToListAsync();
+
+            if(!String.IsNullOrEmpty(sortBy))
+            {
+                technicianes = sortBy switch
+                {
+                    "FirstNameASC" => technicianes.OrderBy(t => t.FirstName).ToList(),
+                    "FirstNameDESC" => technicianes.OrderByDescending(t => t.FirstName).ToList(),
+                    "LastNameASC" => technicianes.OrderBy(t => t.LastName).ToList(),
+                    "LastNameDESC" => technicianes.OrderByDescending(t => t.LastName).ToList(),
+                   
+                };
+            }
+
             ViewBag.TotalTechnicians = _context.Technicianes.Count();
-            return View(await _context.Technicianes.ToListAsync());
+            return View(technicianes);
+           
         }
 
         // GET: Technicians/Details/5

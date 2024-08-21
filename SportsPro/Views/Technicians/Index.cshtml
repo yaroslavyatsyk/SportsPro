@@ -23,6 +23,28 @@
 }
 else
 {
+
+    <form>
+        <div class="class-group">
+            <input type = "radio" id="SortByFirstNameASC" name="sortBy" value="FirstNameASC" @(ViewBag.CurrSort == "FirstNameASC" ? "checked" : "") />
+            <label for="SortByFirstNameASC">First Name ASC</label>
+        </div>
+        <div class="class-group">
+            <input type = "radio" id="SortByFirstNameDESC" name="sortBy" value="FirstNameDESC" @(ViewBag.CurrSort == "FirstNameDESC" ? "checked" : "") />
+            <label for="SortByFirstNameDESC">First Name DESC</label>
+            </div>
+            <div class="class-group">
+                <input type = "radio" id="SortByLastNameASC" name="sortBy" value="LastNameASC" @(ViewBag.CurrSort == "LastNameASC" ? "checked" : "") />
+                <label for="SortByLastNameASC">Last Name ASC</label>
+                </div>
+                <div class="class-group">
+            <input type="radio" id="SortByLastNamedesc" name="sortBy" value="LastNameDESC" @(ViewBag.CurrSort == "LastNameDESC" ? "checked" : "") />
+            <label for="SortByLastNameASC">Last Name DESC</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Sort</button>
+
+    </form>
     
 
 <table class="table table-bordered">
