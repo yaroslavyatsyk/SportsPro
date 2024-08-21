@@ -22,10 +22,46 @@ namespace SportsPro.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sorting = "")
         {
+            var customers = await _context.Customers.ToListAsync();
+
+            if(!string.IsNullOrEmpty(sorting))
+            {
+                switch (sorting)
+                {
+                    case "FirstNameASC":
+                        customers = _context.Customers.OrderBy(c => c.FirstName).ToList();
+                        break;
+                        case "FirstNameDESC":
+                            customers = _context.Customers.OrderByDescending(c => c.FirstName).ToList();
+                        break;
+                    case "LastNameASC":
+                        customers = _context.Customers.OrderBy(c => c.LastName).ToList();
+                        break;
+                        case "LastNameDESC":
+                            customers = _context.Customers.OrderByDescending(c => c.LastName).ToList();
+                        break;
+                    case "CityASC":
+                        customers = _context.Customers.OrderBy(c => c.City).ToList();
+                        break;
+                        case "CityDESC":
+                            customers = _context.Customers.OrderByDescending(c => c.City).ToList();
+                        break;
+                    case "StateASC":
+                        customers = _context.Customers.OrderBy(c => c.State).ToList();
+                        break;
+
+                        case "StateDESC":
+                            customers = _context.Customers.OrderByDescending(c => c.State).ToList();
+                        break;
+          
+                }
+            }
+
+
             ViewBag.TotalCustomers = _context.Customers.Count();
-            return View(await _context.Customers.ToListAsync());
+            return View(customers);
         }
 
         // GET: Customers/Details/5

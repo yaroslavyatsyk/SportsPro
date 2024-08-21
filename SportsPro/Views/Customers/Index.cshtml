@@ -25,6 +25,47 @@
     <h1>No Customers Found!</h1>
 }
 else {
+    <form>
+        <div class="form-group">
+            <label as>Sort By</label>
+           
+            <div>
+                <input type="radio" id="SortByFirstNameAsc" name="sorting" value="FirstNameASC" @(ViewBag.CurrSort == "FirstNameASC" ? "checked" : "") />
+                <label for="SortByNameAsc">First Name (A-Z)</label>
+            </div>
+            <div>
+                <input type="radio" id="SortByFirstNameDesc" name="sorting" value="FirstNameDESC" @(ViewBag.CurrSort == "FirstNameDESC" ? "checked" : "") />
+                <label for="SortByNameDesc">First Name (Z-A)</label>
+                </div>
+
+                <div>
+                <input type="radio" id="SortByLastNameAsc" name="sorting" value="LastNameASC" @(ViewBag.CurrSort == "LastNameASC" ? "checked" : "") />
+                    <label for="SortByCityAsc">Last Name (A-Z)</label>
+
+                    </div>
+                    
+                    <div>
+                <input type="radio" id="SortByLastNameDesc" name="sorting" value="LastNameDESC" @(ViewBag.CurrSort == "LastNameDESC" ? "checked" : "") />
+                        <label for="SortByCityDesc">Last Name (Z-A)</label>
+                        </div>
+
+                        <div>
+                <input type="radio" id="SortByCityAsc" name="sorting" value="CityASC" @(ViewBag.CurrSort == "CityASC" ? "checked" : "") />
+                            <label for="SortByEmailAsc">City (A-Z)</label>
+                            </div>
+
+                            <div>
+                <input type="radio" id="SortByCityDesc" name="sorting" value="CityDESC" @(ViewBag.CurrSort == "CityDESC" ? "checked" : "") />
+                                <label for="SortByEmailDesc">City (Z-A)</label>
+
+
+
+                
+
+       
+        </div>
+        <button type="submit" class="btn btn-primary">Apply</button>
+    </form>
 <table class="table table-bordered">
     <thead>
         <tr>
