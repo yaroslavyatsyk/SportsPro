@@ -32,7 +32,7 @@ namespace SportsPro.Models
             }
         }
 
-        public string? Position { get; set; }
+     
 
     }
 }
