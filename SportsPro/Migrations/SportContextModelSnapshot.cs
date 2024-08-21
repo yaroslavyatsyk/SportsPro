@@ -189,6 +189,9 @@ namespace SportsPro.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Position")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("TechnicianId");
 
                     b.ToTable("Technicianes");
