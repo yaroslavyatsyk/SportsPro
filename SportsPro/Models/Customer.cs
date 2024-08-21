@@ -19,8 +19,9 @@ namespace SportsPro.Models
         [StringLength(50, MinimumLength = 1, ErrorMessage = "The First Name must have at least 1 character and not more than or equal 50")]
         public string? City { get; set; }
 
-        [Required(ErrorMessage = "Please enter state.")]
+   /*     [Required(ErrorMessage = "Please enter state.")]
         [StringLength(50, MinimumLength = 1, ErrorMessage = "The First Name must have at least 1 character and not more than or equal 50")]
+   */
         public string? State { get; set; }
 
         [Required(ErrorMessage = "Please enter postal code.")]

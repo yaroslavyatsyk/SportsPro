@@ -108,6 +108,10 @@ namespace SportsPro.Controllers
         
             if (ModelState.IsValid)
             {
+                if(String.IsNullOrEmpty(customer.State))
+                {
+                    customer.State = "Non Applicable";
+                }
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Customer has been added successfully";

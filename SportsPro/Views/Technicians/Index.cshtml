@@ -37,6 +37,9 @@ else
             <th>
                 @Html.DisplayNameFor(model => model.Phone)
             </th>
+            <th>
+                Title Position
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -54,6 +57,9 @@ else
                 <td>
                     @Html.DisplayFor(modelItem => item.Phone)
                 </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Position)
+                    </td>
                 <td>
                     <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.TechnicianId">Edit</a> 
                     <a class="btn btn-info" asp-action="Details" asp-route-id="@item.TechnicianId">Details</a>
