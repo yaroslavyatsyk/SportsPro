@@ -43,7 +43,7 @@ else {
 <form method="get" id="sortingForm">
     <div class="form-group">
         <label for="sort">Sort Incidents by:</label>
-<select id="sort" name="sorting">
+<select id="sort">
             <option value="Title (A-Z)">Title (A-Z)</option>
 <option value="Customer (A-Z)">Customer (A-Z)</option>
 <option value="Product (A-Z)">Product (A-Z)</option>
@@ -153,3 +153,17 @@ else {
 
 
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var sorting = document.getElementById("sortingForm");
+        var select = document.getElementById("sort");
+
+        if (sorting && select) {
+            select.addEventListener('change', function () {
+                sorting.submit();
+            });
+        } else {
+            console.error("Sorting form or select element not found.");
+        }
+    });
+</script>
