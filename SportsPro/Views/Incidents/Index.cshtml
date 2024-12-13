@@ -21,7 +21,7 @@
     <h1>No Incidents Found!</h1>
 }
 else {
-<form method="get">
+<form method="get" id="searchingForm">
     <div class="form-group">
 <label for="filter">Filter Incidents</label>
        <select id="filter" name="filtering">
@@ -40,7 +40,7 @@ else {
 
 <br/>
 
-<form method="get">
+<form method="get" id="sortingForm">
     <div class="form-group">
         <label for="sort">Sort Incidents by:</label>
 <select id="sort" name="sorting">
@@ -61,7 +61,7 @@ else {
     </div>
 
     <br />
-<input type="submit" class="btn btn-primary" value="Apply" />
+
 </form>
 
 
@@ -150,7 +150,6 @@ else {
 </table>
         <p>The total amount of incidents is @ViewBag.TotalIncidents</p>
 }
-
 
 
 

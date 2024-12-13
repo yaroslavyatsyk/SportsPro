@@ -27,7 +27,7 @@
 
 <br />
 @if(Model.Count() != 0) {
-    <form method="get">
+    <form method="get" id="searchForm">
         <div class="form-group">
             <label for="search">Search Products</label>
 
@@ -35,9 +35,10 @@
 
 
         </div>
+        </form>
 
-
-        <div class="form-group">
+        <form method="get" id="sortingForm">
+            <div class="form-group">
             <label>Sort by:</label>
 
             <div class="form-check">
@@ -106,7 +107,7 @@
 
             <br />
 
-            <input type="submit" class="btn btn-primary" value="Apply"></input>
+           
 
 
 
@@ -168,3 +169,17 @@ else
     <h1>No products found!</h1>
 }
 </div>
+
+<script>
+    var form = document.getElementById("sortingForm");
+
+    var radioButtons = form.querySelectorAll("input[type=radio]");
+
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', function () {
+            sortingForm.submit();  // Automatically submit the form when a radio button is selected
+        });
+    });
+
+
+</script>

@@ -23,12 +23,14 @@
 }
 else
 {
-
-    <form>
+    <form method="get" id="searching">
         <div class="class-group">
-            <input type = "search" id="search" name="search" placeholder="Find Technicianes" />
+            <input type="search" id="search" name="search" placeholder="Find Technicianes" />
 
         </div>
+    </form>
+    <form method="get" id="sortingForm">
+       
         <div class="class-group">
             <input type = "radio" id="SortByFirstNameASC" name="sortBy" value="FirstNameASC" @(ViewBag.CurrSort == "FirstNameASC" ? "checked" : "") />
             <label for="SortByFirstNameASC">First Name ASC</label>
@@ -46,7 +48,7 @@ else
             <label for="SortByLastNameASC">Last Name DESC</label>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Sort</button>
+               
 
     </form>
     
@@ -93,3 +95,15 @@ else
 </table>
 <p>Total amount of records @ViewBag.TotalTechnicians</p>
 }
+
+<script>
+    var sortingForm = document.getElementById("sortingForm");
+
+    var radios = sortingForm.querySelectorAll("input[type=radio]");
+
+    radios.forEach(radio => {
+        radio.addEventListener("change", function () {
+            sortingForm.submit();
+        })
+        })
+</script>
