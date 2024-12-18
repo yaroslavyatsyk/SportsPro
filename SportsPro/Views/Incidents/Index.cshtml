@@ -21,7 +21,7 @@
     <h1>No Incidents Found!</h1>
 }
 else {
-<form method="get" id="searchingForm">
+<form method="get" id="filteringForm">
     <div class="form-group">
 <label for="filter">Filter Incidents</label>
        <select id="filter" name="filtering">
@@ -35,7 +35,6 @@ else {
 
 
     </div>
-    <input type="submit" class="btn btn-primary" value="Apply" />
 </form>
 
 <br/>
@@ -166,4 +165,18 @@ else {
             console.error("Sorting form or select element not found.");
         }
     });
+
+    document.addEventListener('DOMContentLoaded',function() {
+        var filteringForm = document.getElementById("filteringForm");
+        var filtering = document.getElementById("filter");
+
+        if(filteringForm && filtering) {
+            filtering.addEventListener('change', function() {
+                filteringForm.submit();
+            })
+        }
+        else {
+                 console.error("Filtering form or select element not found.");
+        }
+    })
 </script>

@@ -110,12 +110,20 @@ else {
 }
 
 <script>
-    var sortForm = document.getElementById("sorting")
-    var options = document.querySelectorAll("input[type=radio]");
 
-    options.forEach(option => {
-        option.addEventListener("change",function() {
-            option.submit()
+
+    var sortForm = document.getElementById("sorting")
+
+    if (options) {
+        var options = document.querySelectorAll("input[type=radio]");
+
+        options.forEach(option => {
+            option.addEventListener("change", function () {
+                option.submit()
+            })
         })
-    })
+    }
+    else {
+        console.log("Error")
+    }
 </script>

@@ -171,15 +171,23 @@ else
 </div>
 
 <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
     var form = document.getElementById("sortingForm");
 
-    var radioButtons = form.querySelectorAll("input[type=radio]");
-
-    radioButtons.forEach(radio => {
-        radio.addEventListener('change', function () {
-            sortingForm.submit();  // Automatically submit the form when a radio button is selected
+    if (form) {
+        var radioButtons = form.querySelectorAll("input[type=radio]");
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function () {
+                form.submit(); // Use `form` instead of `sortingForm`
+            });
         });
-    });
+    } else {
+        console.error("Form with ID 'sortingForm' not found.");
+    }
+});
+    
+
 
 
 </script>
