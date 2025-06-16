@@ -14,7 +14,10 @@ namespace SportsPro.Models
 		[Required(ErrorMessage = "Please enter name.")]
 		public string? Name { get; set; }
 
-		public DateTime ReleaseDate { get; set; }
+		[DataType(DataType.Date)]
+		[Required(ErrorMessage = "Please enter the release date.")]
+		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime ReleaseDate { get; set; }
 		
 		[Required(ErrorMessage = "Please enter the price")]
 		[Range(0.0,9999.99, ErrorMessage = "Price must be between 0.0 and 9999.99")]
