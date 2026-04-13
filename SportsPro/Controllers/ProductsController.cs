@@ -20,7 +20,7 @@ namespace SportsPro.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(string sortBy = "", string search = "")
+        public async Task<IActionResult> Index(string? sortBy, string? search)
         {
 
 

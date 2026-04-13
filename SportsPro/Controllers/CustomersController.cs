@@ -22,45 +22,52 @@ namespace SportsPro.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index(string sorting = "")
+        public async Task<IActionResult> Index(string? sorting, string? fullName)
         {
-            var customers = await _context.Customers.ToListAsync();
+            IQueryable<Customer> custommerQuery = _context.Customers;
 
-            if(!string.IsNullOrEmpty(sorting))
+            if (!string.IsNullOrWhiteSpace(sorting))
             {
                 switch (sorting)
                 {
                     case "FirstNameASC":
-                        customers = _context.Customers.OrderBy(c => c.FirstName).ToList();
+                        custommerQuery = _context.Customers.OrderBy(c => c.FirstName);
                         break;
                         case "FirstNameDESC":
-                            customers = _context.Customers.OrderByDescending(c => c.FirstName).ToList();
+                            custommerQuery = _context.Customers.OrderByDescending(c => c.FirstName);
                         break;
                     case "LastNameASC":
-                        customers = _context.Customers.OrderBy(c => c.LastName).ToList();
+                        custommerQuery = _context.Customers.OrderBy(c => c.LastName);
                         break;
                         case "LastNameDESC":
-                            customers = _context.Customers.OrderByDescending(c => c.LastName).ToList();
+                            custommerQuery = _context.Customers.OrderByDescending(c => c.LastName);
                         break;
                     case "CityASC":
-                        customers = _context.Customers.OrderBy(c => c.City).ToList();
+                        custommerQuery = _context.Customers.OrderBy(c => c.City);
                         break;
                         case "CityDESC":
-                            customers = _context.Customers.OrderByDescending(c => c.City).ToList();
+                            custommerQuery = _context.Customers.OrderByDescending(c => c.City);
                         break;
                     case "StateASC":
-                        customers = _context.Customers.OrderBy(c => c.State).ToList();
+                        custommerQuery = _context.Customers.OrderBy(c => c.State);
                         break;
 
                         case "StateDESC":
-                            customers = _context.Customers.OrderByDescending(c => c.State).ToList();
+                            custommerQuery = _context.Customers.OrderByDescending(c => c.State);
                         break;
           
                 }
             }
 
+            if(!string.IsNullOrWhiteSpace(fullName))
+            {
+                fullName = fullName.Trim().ToLower();
+                custommerQuery = custommerQuery.Where(c => (c.FirstName + " " + c.LastName).ToLower().Contains(fullName));
+            }
 
-            ViewBag.TotalCustomers = _context.Customers.Count();
+
+            var customers = await custommerQuery.ToListAsync();
+            ViewBag.TotalCustomers = customers.Count;
             return View(customers);
         }
 
