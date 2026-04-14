@@ -22,7 +22,7 @@ namespace SportsPro.Controllers
         // GET: Incidents
         public async Task<IActionResult> Index(string? filtering, string? sorting)
         {
-            IQueryable<Incident> incidentsQuery = _context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
+            var incidentsQuery = _context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).AsQueryable();
 
 
 
@@ -44,10 +44,6 @@ namespace SportsPro.Controllers
                     case "Resolved":
 
                         incidentsQuery = _context.Incidents.Where(i => i.DateClosed != null).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
-                        break;
-
-                    default:
-                        incidentsQuery = _context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
                         break;
 
                 }

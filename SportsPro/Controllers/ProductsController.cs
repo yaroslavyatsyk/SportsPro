@@ -24,54 +24,51 @@ namespace SportsPro.Controllers
         {
 
 
-            var products = await _context.Products.ToListAsync();
+            var productQuery = _context.Products.AsQueryable();
 
-            if (!String.IsNullOrEmpty(search))
+            if (!String.IsNullOrWhiteSpace(search))
             {
-                products = products.Where(p => p.Name.Contains(search,StringComparison.OrdinalIgnoreCase)).ToList();
-
-                return View(products);
+                productQuery = productQuery.Where(p => p.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
             }
 
 
-            if (!String.IsNullOrEmpty(sortBy))
+            if (!String.IsNullOrWhiteSpace(sortBy))
             {
                 switch (sortBy)
                 {
                     case "name_asc":
-                        products = products.OrderBy(p => p.Name).ToList();
+                        productQuery = productQuery.OrderBy(p => p.Name);
                         break;
                     case "name_desc":
-                        products = products.OrderByDescending(p => p.Name).ToList();
+                        productQuery = productQuery.OrderByDescending(p => p.Name);
                         break;
                     case "price_asc":
-                        products = products.OrderBy(p => p.Price).ToList();
+                        productQuery = productQuery.OrderBy(p => p.Price);
                         break;
                     case "price_desc":
-                        products = products.OrderByDescending(p => p.Price).ToList();
+                        productQuery = productQuery.OrderByDescending(p => p.Price);
                         break;
                     case "release_asc":
-                        products = products.OrderBy(p => p.ReleaseDate).ToList();
+                        productQuery = productQuery.OrderBy(p => p.ReleaseDate);
                         break;
-
                     case "release_desc":
-                        products = products.OrderByDescending(p => p.ReleaseDate).ToList();
+                        productQuery = productQuery.OrderByDescending(p => p.ReleaseDate);
                         break;
-
                     case "code_asc":
-                        products = products.OrderBy(p => p.ProductCode).ToList();
+                        productQuery = productQuery.OrderBy(p => p.ProductCode);
                         break;
-
                     case "code_desc":
-                        products = products.OrderByDescending(p => p.ProductCode).ToList();
+                        productQuery = productQuery.OrderByDescending(p => p.ProductCode);
                         break;
                 }
-            
-              
-                
             }
 
 
+            
+              
+                
+
+            var products = await productQuery.ToListAsync();
 
             ViewBag.TotalProducts = products.Count;
             ViewBag.TotalPrice = products.Sum(p => p.Price);

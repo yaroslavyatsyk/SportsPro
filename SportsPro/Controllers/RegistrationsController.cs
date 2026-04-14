@@ -22,8 +22,13 @@ namespace SportsPro.Controllers
         // GET: Registrations
         public async Task<IActionResult> Index()
         {
-            var sportContext = _context.Registrations.Include(r => r.Customer).Include(r => r.Product);
-            return View(await sportContext.ToListAsync());
+           var query = _context.Registrations
+                .Include(r => r.Customer)
+                .Include(r => r.Product)
+                .AsNoTracking();
+            var registrations = await query.ToListAsync();
+            ViewBag.TotalRegistrations = registrations.Count;
+            return View(registrations);
         }
 
         // GET: Registrations/Details/5

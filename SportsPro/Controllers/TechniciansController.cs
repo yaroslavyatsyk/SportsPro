@@ -20,30 +20,32 @@ namespace SportsPro.Controllers
         }
 
         // GET: Technicians
-        public async Task<IActionResult> Index(string sortBy = "", string search = "")
+        public async Task<IActionResult> Index(string? sortBy, string? search)
         {
 
-            var technicianes = await _context.Technicianes.ToListAsync();
+            var techQuery = _context.Technicianes.AsQueryable();
 
-            if(!String.IsNullOrEmpty(sortBy))
+            if (!String.IsNullOrWhiteSpace(sortBy))
             {
-                technicianes = sortBy switch
+                techQuery = sortBy switch
                 {
-                    "FirstNameASC" => technicianes.OrderBy(t => t.FirstName).ToList(),
-                    "FirstNameDESC" => technicianes.OrderByDescending(t => t.FirstName).ToList(),
-                    "LastNameASC" => technicianes.OrderBy(t => t.LastName).ToList(),
-                    "LastNameDESC" => technicianes.OrderByDescending(t => t.LastName).ToList(),
+                    "FirstNameASC" => techQuery.OrderBy(t => t.FirstName),
+                    "FirstNameDESC" => techQuery.OrderByDescending(t => t.FirstName),
+                    "LastNameASC" => techQuery.OrderBy(t => t.LastName),
+                    "LastNameDESC" => techQuery.OrderByDescending(t => t.LastName),
                    
                 };
             }
 
-            if(!String.IsNullOrEmpty(search))
+            if(!String.IsNullOrWhiteSpace(search))
             {
-                technicianes = technicianes.Where(t => t.FirstName.Contains(search,StringComparison.OrdinalIgnoreCase) || t.LastName.Contains(search,StringComparison.OrdinalIgnoreCase)).ToList();
+                techQuery = techQuery.Where(t => t.FirstName.Contains(search,StringComparison.OrdinalIgnoreCase) || t.LastName.Contains(search,StringComparison.OrdinalIgnoreCase));
                
             }
 
-            ViewBag.TotalTechnicians = _context.Technicianes.Count();
+            
+            var technicianes = await techQuery.ToListAsync();
+            ViewBag.TotalTechnicians = technicianes.Count;
             return View(technicianes);
            
         }
