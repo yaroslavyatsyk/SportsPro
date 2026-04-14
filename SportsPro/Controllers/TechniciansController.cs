@@ -39,8 +39,9 @@ namespace SportsPro.Controllers
 
             if(!String.IsNullOrWhiteSpace(search))
             {
-                techQuery = techQuery.Where(t => t.FirstName.Contains(search,StringComparison.OrdinalIgnoreCase) || t.LastName.Contains(search,StringComparison.OrdinalIgnoreCase));
-               
+                search = search.ToLower();
+                techQuery = techQuery.Where(t => (t.FirstName + " " + t.LastName).ToLower().Contains(search));
+
             }
 
             

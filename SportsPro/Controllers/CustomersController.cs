@@ -221,13 +221,13 @@ namespace SportsPro.Controllers
 
         private List<string> getCountries()
         {
-            var data = new WebClient().DownloadString("https://restcountries.com/v3.1/all");
+            var data = new WebClient().DownloadString("https://restcountries.com/v3.1/all?fields=name,capital,currencies");
             dynamic json = JsonConvert.DeserializeObject(data);
             List<string> listOfCountries = new List<string>();
             foreach (var jsonObject in json)
             {
                 if ((string)jsonObject.name.common != "Russia")
-                    listOfCountries.Add((string)jsonObject.name.common); // we imposed our own sanctions
+                    listOfCountries.Add((string)jsonObject.name.common); 
 
             }
             listOfCountries.Sort();
