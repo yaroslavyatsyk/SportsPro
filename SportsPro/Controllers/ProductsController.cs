@@ -28,7 +28,8 @@ namespace SportsPro.Controllers
 
             if (!String.IsNullOrWhiteSpace(search))
             {
-                productQuery = productQuery.Where(p => p.Name.Contains(search, StringComparison.OrdinalIgnoreCase));
+                search = search.Trim().ToLower();
+                productQuery = productQuery.Where(p => p.Name.ToLower().Contains(search));
             }
 
 
