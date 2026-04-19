@@ -20,100 +20,115 @@ namespace SportsPro.Controllers
         }
 
         // GET: Incidents
-        public async Task<IActionResult> Index(string? filtering, string? sorting)
+        public async Task<IActionResult> Index(string? filtering, string? sorting, int? pageNumber)
         {
-            var incidentsQuery = _context.Incidents.Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician).AsQueryable();
+            IQueryable<Incident> incidentsQuery = _context.Incidents
+                .Include(i => i.Customer)
+                .Include(i => i.Product)
+                .Include(i => i.Technician);
 
-
-
-
+            // Filtering
             if (!string.IsNullOrWhiteSpace(filtering))
             {
-
                 switch (filtering)
                 {
-
                     case "Unassigned":
-                        incidentsQuery = _context.Incidents.Where(i => i.TechnicianId == null).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
+                        incidentsQuery = incidentsQuery.Where(i => i.TechnicianId == null);
                         break;
-                    case "Opened":
 
-                        incidentsQuery = _context.Incidents.Where(i => i.DateClosed == null).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
+                    case "Opened":
+                        incidentsQuery = incidentsQuery.Where(i => i.DateClosed == null);
                         break;
 
                     case "Resolved":
-
-                        incidentsQuery = _context.Incidents.Where(i => i.DateClosed != null).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
+                        incidentsQuery = incidentsQuery.Where(i => i.DateClosed != null);
                         break;
-
                 }
             }
 
+            // Sorting
             if (!string.IsNullOrWhiteSpace(sorting))
             {
                 switch (sorting)
                 {
                     case "Customer (A-Z)":
+                        incidentsQuery = incidentsQuery
+                            .OrderBy(i => i.Customer.LastName)
+                            .ThenBy(i => i.Customer.FirstName);
+                        break;
 
-                      
-                            incidentsQuery = _context.Incidents.OrderBy(i => i.Customer).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
+                    case "Customer (Z-A)":
+                        incidentsQuery = incidentsQuery
+                            .OrderByDescending(i => i.Customer.LastName)
+                            .ThenByDescending(i => i.Customer.FirstName);
                         break;
-                        case "Customer (Z-A)":
-                            
-                            incidentsQuery = _context.Incidents.OrderByDescending(i => i.Customer).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
-                        break;
+
                     case "Product (A-Z)":
-
-                       
-                            incidentsQuery = _context.Incidents.OrderBy(i => i.Product.Name).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
+                        incidentsQuery = incidentsQuery.OrderBy(i => i.Product.Name);
                         break;
-                        case "Product (Z-A)":
-                            incidentsQuery = _context.Incidents.OrderByDescending(i => i.Product.Name).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
-                            break;
+
+                    case "Product (Z-A)":
+                        incidentsQuery = incidentsQuery.OrderByDescending(i => i.Product.Name);
+                        break;
+
                     case "Technician (A-Z)":
-                        incidentsQuery = _context.Incidents.OrderBy(i => i.Technician).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
+                        incidentsQuery = incidentsQuery.OrderBy(i => i.Technician.FullName);
                         break;
-                        case "Technician (Z-A)":
-                            incidentsQuery = _context.Incidents.OrderByDescending(i => i.Technician).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
-                            break;
+
+                    case "Technician (Z-A)":
+                        incidentsQuery = incidentsQuery.OrderByDescending(i => i.Technician.FullName);
+                        break;
+
                     case "DateOpened (A-Z)":
-                        incidentsQuery = _context.Incidents.OrderBy(i => i.DateOpened).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
+                        incidentsQuery = incidentsQuery.OrderBy(i => i.DateOpened);
                         break;
-                        case "DateOpened (Z-A)":
-                            incidentsQuery = _context.Incidents.OrderByDescending(i => i.DateOpened).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
-                            break;
+
+                    case "DateOpened (Z-A)":
+                        incidentsQuery = incidentsQuery.OrderByDescending(i => i.DateOpened);
+                        break;
+
                     case "DateClosed (A-Z)":
-                        incidentsQuery = _context.Incidents.OrderBy(i => i.DateClosed).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
+                        incidentsQuery = incidentsQuery.OrderBy(i => i.DateClosed);
                         break;
-                        case "DateClosed (Z-A)":
-                            incidentsQuery = _context.Incidents.OrderByDescending(i => i.DateClosed).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
-                            break;
+
+                    case "DateClosed (Z-A)":
+                        incidentsQuery = incidentsQuery.OrderByDescending(i => i.DateClosed);
+                        break;
+
                     case "Title (A-Z)":
-                        incidentsQuery = _context.Incidents.OrderBy(i => i.Title).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
-                        break;
-                        case "Title (Z-A)":
-                            
-                            incidentsQuery = _context.Incidents.OrderByDescending(i => i.Title).Include(i => i.Customer).Include(i => i.Product).Include(i => i.Technician);
+                        incidentsQuery = incidentsQuery.OrderBy(i => i.Title);
                         break;
 
+                    case "Title (Z-A)":
+                        incidentsQuery = incidentsQuery.OrderByDescending(i => i.Title);
+                        break;
+
+                    default:
+                        incidentsQuery = incidentsQuery.OrderBy(i => i.DateOpened);
+                        break;
                 }
-
-                
-
-               
-
-
-                
+            }
+            else
+            {
+                incidentsQuery = incidentsQuery.OrderBy(i => i.DateOpened);
             }
 
+            ViewBag.CurrentFiltering = filtering;
+            ViewBag.CurrentSorting = sorting;
+            ViewBag.TotalIncidents = await incidentsQuery.CountAsync();
 
-            var incidents = await incidentsQuery.ToListAsync();
-            ViewBag.TotalIncidents = incidents.Count;
+            int pageSize = 5;
 
-            return View(incidents);
+            var paginatedIncidents = await PaginatedList<Incident>.CreateAsync(
+                incidentsQuery.AsNoTracking(),
+                pageNumber ?? 1,
+                pageSize
+            );
+
+            return View(paginatedIncidents);
         }
-       
-       
+
+
 
         // GET: Incidents/Details/5
         public async Task<IActionResult> Details(int? id)
