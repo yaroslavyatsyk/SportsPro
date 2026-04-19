@@ -20,12 +20,11 @@ namespace SportsPro.Controllers
         }
 
         // GET: Technicians
-        public async Task<IActionResult> Index(string? sortBy, string? search)
+        public async Task<IActionResult> Index(string? sortBy, string? search, int? pageNumber)
         {
+            IQueryable<Technician> techQuery = _context.Technicianes;
 
-            var techQuery = _context.Technicianes.AsQueryable();
-
-            if (!String.IsNullOrWhiteSpace(sortBy))
+            if (!string.IsNullOrWhiteSpace(sortBy))
             {
                 techQuery = sortBy switch
                 {
@@ -33,22 +32,34 @@ namespace SportsPro.Controllers
                     "FirstNameDESC" => techQuery.OrderByDescending(t => t.FirstName),
                     "LastNameASC" => techQuery.OrderBy(t => t.LastName),
                     "LastNameDESC" => techQuery.OrderByDescending(t => t.LastName),
-                   
+                    _ => techQuery.OrderBy(t => t.LastName).ThenBy(t => t.FirstName)
                 };
             }
-
-            if(!String.IsNullOrWhiteSpace(search))
+            else
             {
-                search = search.ToLower();
-                techQuery = techQuery.Where(t => (t.FirstName + " " + t.LastName).ToLower().Contains(search));
-
+                techQuery = techQuery.OrderBy(t => t.LastName).ThenBy(t => t.FirstName);
             }
 
-            
-            var technicianes = await techQuery.ToListAsync();
-            ViewBag.TotalTechnicians = technicianes.Count;
-            return View(technicianes);
-           
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim().ToLower();
+                techQuery = techQuery.Where(t =>
+                    (t.FirstName + " " + t.LastName).ToLower().Contains(search));
+            }
+
+            ViewBag.CurrentSortBy = sortBy;
+            ViewBag.CurrentSearch = search;
+            ViewBag.TotalTechnicians = await techQuery.CountAsync();
+
+            int pageSize = 5;
+
+            var paginatedTechnicians = await PaginatedList<Technician>.CreateAsync(
+                techQuery.AsNoTracking(),
+                pageNumber ?? 1,
+                pageSize
+            );
+
+            return View(paginatedTechnicians);
         }
 
         // GET: Technicians/Details/5
