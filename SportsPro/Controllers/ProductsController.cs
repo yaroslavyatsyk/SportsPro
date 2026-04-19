@@ -20,20 +20,17 @@ namespace SportsPro.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(string? sortBy, string? search)
+        public async Task<IActionResult> Index(string? sortBy, string? search, int? pageNumber)
         {
+            IQueryable<Product> productQuery = _context.Products;
 
-
-            var productQuery = _context.Products.AsQueryable();
-
-            if (!String.IsNullOrWhiteSpace(search))
+            if (!string.IsNullOrWhiteSpace(search))
             {
                 search = search.Trim().ToLower();
                 productQuery = productQuery.Where(p => p.Name.ToLower().Contains(search));
             }
 
-
-            if (!String.IsNullOrWhiteSpace(sortBy))
+            if (!string.IsNullOrWhiteSpace(sortBy))
             {
                 switch (sortBy)
                 {
@@ -61,20 +58,31 @@ namespace SportsPro.Controllers
                     case "code_desc":
                         productQuery = productQuery.OrderByDescending(p => p.ProductCode);
                         break;
+                    default:
+                        productQuery = productQuery.OrderBy(p => p.Name);
+                        break;
                 }
             }
+            else
+            {
+                productQuery = productQuery.OrderBy(p => p.Name);
+            }
 
+            ViewBag.CurrentSortBy = sortBy;
+            ViewBag.CurrentSearch = search;
 
-            
-              
-                
+            ViewBag.TotalProducts = await productQuery.CountAsync();
+            ViewBag.TotalPrice = await productQuery.SumAsync(p => p.Price);
 
-            var products = await productQuery.ToListAsync();
+            int pageSize = 5;
 
-            ViewBag.TotalProducts = products.Count;
-            ViewBag.TotalPrice = products.Sum(p => p.Price);
+            var paginatedProducts = await PaginatedList<Product>.CreateAsync(
+                productQuery.AsNoTracking(),
+                pageNumber ?? 1,
+                pageSize
+            );
 
-            return View(products);
+            return View(paginatedProducts);
         }
 
         // GET: Products/Details/5
