@@ -20,15 +20,26 @@ namespace SportsPro.Controllers
         }
 
         // GET: Registrations
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pageNumber)
         {
-           var query = _context.Registrations
+            var query = _context.Registrations
                 .Include(r => r.Customer)
                 .Include(r => r.Product)
-                .AsNoTracking();
-            var registrations = await query.ToListAsync();
-            ViewBag.TotalRegistrations = registrations.Count;
-            return View(registrations);
+                .AsNoTracking()
+                .OrderBy(r => r.Customer.LastName)
+                .ThenBy(r => r.Customer.FirstName);
+
+            ViewBag.TotalRegistrations = await query.CountAsync();
+
+            int pageSize = 5;
+
+            var paginatedRegistrations = await PaginatedList<Registration>.CreateAsync(
+                query,
+                pageNumber ?? 1,
+                pageSize
+            );
+
+            return View(paginatedRegistrations);
         }
 
         // GET: Registrations/Details/5
