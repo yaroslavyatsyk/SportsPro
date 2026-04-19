@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SportsPro.Models.Customer>
+﻿@model PaginatedList<Customer>
 
 @{
     ViewData["Title"] = "Customers Management";
@@ -6,124 +6,150 @@
 
 <h1>@ViewData["Title"]</h1>
 
-
-@if(TempData["Message"] != null)
+@if (TempData["Message"] != null)
 {
     <div class="alert alert-success" role="alert">
-
-
         <p>@TempData["Message"]</p>
     </div>
 }
 
 <p>
-    <a class = "btn btn-primary" asp-action="Create">Create New</a>
+    <a class="btn btn-primary" asp-action="Create">Create New</a>
 </p>
 
-@if(Model.Count() == 0)
-{
-    <h1>No Customers Found!</h1>
-}
-else {
-    <form method="get" id="sorting">
-        <div class="form-group">
-            <label as>Sort By</label>
-           
-            <div>
-                <input type="radio" id="SortByFirstNameAsc" name="sorting" value="FirstNameASC" @(ViewBag.CurrSort == "FirstNameASC" ? "checked" : "") />
-                <label for="SortByNameAsc">First Name (A-Z)</label>
-            </div>
-            <div>
-                <input type="radio" id="SortByFirstNameDesc" name="sorting" value="FirstNameDESC" @(ViewBag.CurrSort == "FirstNameDESC" ? "checked" : "") />
-                <label for="SortByNameDesc">First Name (Z-A)</label>
-                </div>
+<form method="get" id="sorting">
+    <div class="form-group">
+        <label>Sort By</label>
 
-                <div>
-                <input type="radio" id="SortByLastNameAsc" name="sorting" value="LastNameASC" @(ViewBag.CurrSort == "LastNameASC" ? "checked" : "") />
-                    <label for="SortByCityAsc">Last Name (A-Z)</label>
-
-                    </div>
-                    
-                    <div>
-                <input type="radio" id="SortByLastNameDesc" name="sorting" value="LastNameDESC" @(ViewBag.CurrSort == "LastNameDESC" ? "checked" : "") />
-                        <label for="SortByCityDesc">Last Name (Z-A)</label>
-                        </div>
-
-                        <div>
-                <input type="radio" id="SortByCityAsc" name="sorting" value="CityASC" @(ViewBag.CurrSort == "CityASC" ? "checked" : "") />
-                            <label for="SortByEmailAsc">City (A-Z)</label>
-                            </div>
-
-                            <div>
-                <input type="radio" id="SortByCityDesc" name="sorting" value="CityDESC" @(ViewBag.CurrSort == "CityDESC" ? "checked" : "") />
-                                <label for="SortByEmailDesc">City (Z-A)</label>
-
-
-
-                
-
-       
+        <div>
+            <input type="radio" id="SortByFirstNameAsc" name="sorting" value="FirstNameASC"
+                   @(ViewBag.CurrentSorting == "FirstNameASC" ? "checked" : "") />
+            <label for="SortByFirstNameAsc">First Name (A-Z)</label>
         </div>
-      
-    </form>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-           <th>
-              Full Name
-           </th>
-            <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-           
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-          
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            
-            <td>
-                <a class = "btn btn-primary" asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a> 
-                <a class = "btn btn-info" asp-action="Details" asp-route-id="@item.CustomerId">Details</a> 
-                <a class = "btn btn-danger" asp-action="Delete" asp-route-id="@item.CustomerId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
 
-<p>Total number of customers is @ViewBag.TotalCustomers</p>
+        <div>
+            <input type="radio" id="SortByFirstNameDesc" name="sorting" value="FirstNameDESC"
+                   @(ViewBag.CurrentSorting == "FirstNameDESC" ? "checked" : "") />
+            <label for="SortByFirstNameDesc">First Name (Z-A)</label>
+        </div>
+
+        <div>
+            <input type="radio" id="SortByLastNameAsc" name="sorting" value="LastNameASC"
+                   @(ViewBag.CurrentSorting == "LastNameASC" ? "checked" : "") />
+            <label for="SortByLastNameAsc">Last Name (A-Z)</label>
+        </div>
+
+        <div>
+            <input type="radio" id="SortByLastNameDesc" name="sorting" value="LastNameDESC"
+                   @(ViewBag.CurrentSorting == "LastNameDESC" ? "checked" : "") />
+            <label for="SortByLastNameDesc">Last Name (Z-A)</label>
+        </div>
+
+        <div>
+            <input type="radio" id="SortByCityAsc" name="sorting" value="CityASC"
+                   @(ViewBag.CurrentSorting == "CityASC" ? "checked" : "") />
+            <label for="SortByCityAsc">City (A-Z)</label>
+        </div>
+
+        <div>
+            <input type="radio" id="SortByCityDesc" name="sorting" value="CityDESC"
+                   @(ViewBag.CurrentSorting == "CityDESC" ? "checked" : "") />
+            <label for="SortByCityDesc">City (Z-A)</label>
+        </div>
+
+        <div>
+            <input type="radio" id="SortByStateAsc" name="sorting" value="StateASC"
+                   @(ViewBag.CurrentSorting == "StateASC" ? "checked" : "") />
+            <label for="SortByStateAsc">State (A-Z)</label>
+        </div>
+
+        <div>
+            <input type="radio" id="SortByStateDesc" name="sorting" value="StateDESC"
+                   @(ViewBag.CurrentSorting == "StateDESC" ? "checked" : "") />
+            <label for="SortByStateDesc">State (Z-A)</label>
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="fullName">Search by Full Name</label>
+        <input type="text" id="fullName" name="fullName" class="form-control"
+               value="@ViewBag.CurrentFullName" placeholder="Enter full name" />
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-secondary">Apply</button>
+</form>
+
+<br />
+
+@if (Model.Count == 0)
+{
+    <h2>No Customers Found!</h2>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Full Name</th>
+                <th>City</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.FullName</td>
+                    <td>@item.City</td>
+                    <td>@item.Email</td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a>
+                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.CustomerId">Details</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.CustomerId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>Total number of customers is @ViewBag.TotalCustomers</p>
+
+    <div class="mt-3">
+        <a asp-action="Index"
+           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-sorting="@ViewBag.CurrentSorting"
+           asp-route-fullName="@ViewBag.CurrentFullName"
+           class="btn btn-outline-primary @(Model.HasPreviousPage ? "" : "disabled")">
+            Previous
+        </a>
+
+        <span class="mx-2">Page @Model.PageIndex of @Model.TotalPages</span>
+
+        <a asp-action="Index"
+           asp-route-pageNumber="@(Model.PageIndex + 1)"
+           asp-route-sorting="@ViewBag.CurrentSorting"
+           asp-route-fullName="@ViewBag.CurrentFullName"
+           class="btn btn-outline-primary @(Model.HasNextPage ? "" : "disabled")">
+            Next
+        </a>
+    </div>
 }
 
 <script>
-
-
-    var sortForm = document.getElementById("sorting")
+    var sortForm = document.getElementById("sorting");
 
     if (sortForm) {
         var options = document.querySelectorAll("input[type=radio]");
 
         options.forEach(option => {
             option.addEventListener("change", function () {
-                sortForm.submit()
-            })
-        })
+                sortForm.submit();
+            });
+        });
     }
     else {
-        console.log("Error")
+        console.log("Error");
     }
 </script>

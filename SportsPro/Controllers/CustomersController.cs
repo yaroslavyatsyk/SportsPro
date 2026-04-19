@@ -22,53 +22,68 @@ namespace SportsPro.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index(string? sorting, string? fullName)
+        public async Task<IActionResult> Index(string? sorting, string? fullName, int? pageNumber)
         {
-            IQueryable<Customer> custommerQuery = _context.Customers;
+            IQueryable<Customer> customerQuery = _context.Customers;
 
             if (!string.IsNullOrWhiteSpace(sorting))
             {
                 switch (sorting)
                 {
                     case "FirstNameASC":
-                        custommerQuery = _context.Customers.OrderBy(c => c.FirstName);
+                        customerQuery = customerQuery.OrderBy(c => c.FirstName);
                         break;
-                        case "FirstNameDESC":
-                            custommerQuery = _context.Customers.OrderByDescending(c => c.FirstName);
+                    case "FirstNameDESC":
+                        customerQuery = customerQuery.OrderByDescending(c => c.FirstName);
                         break;
                     case "LastNameASC":
-                        custommerQuery = _context.Customers.OrderBy(c => c.LastName);
+                        customerQuery = customerQuery.OrderBy(c => c.LastName);
                         break;
-                        case "LastNameDESC":
-                            custommerQuery = _context.Customers.OrderByDescending(c => c.LastName);
+                    case "LastNameDESC":
+                        customerQuery = customerQuery.OrderByDescending(c => c.LastName);
                         break;
                     case "CityASC":
-                        custommerQuery = _context.Customers.OrderBy(c => c.City);
+                        customerQuery = customerQuery.OrderBy(c => c.City);
                         break;
-                        case "CityDESC":
-                            custommerQuery = _context.Customers.OrderByDescending(c => c.City);
+                    case "CityDESC":
+                        customerQuery = customerQuery.OrderByDescending(c => c.City);
                         break;
                     case "StateASC":
-                        custommerQuery = _context.Customers.OrderBy(c => c.State);
+                        customerQuery = customerQuery.OrderBy(c => c.State);
                         break;
-
-                        case "StateDESC":
-                            custommerQuery = _context.Customers.OrderByDescending(c => c.State);
+                    case "StateDESC":
+                        customerQuery = customerQuery.OrderByDescending(c => c.State);
                         break;
-          
+                    default:
+                        customerQuery = customerQuery.OrderBy(c => c.FirstName);
+                        break;
                 }
             }
-
-            if(!string.IsNullOrWhiteSpace(fullName))
+            else
             {
-                fullName = fullName.Trim().ToLower();
-                custommerQuery = custommerQuery.Where(c => (c.FirstName + " " + c.LastName).ToLower().Contains(fullName));
+                customerQuery = customerQuery.OrderBy(c => c.FirstName);
             }
 
+            if (!string.IsNullOrWhiteSpace(fullName))
+            {
+                fullName = fullName.Trim().ToLower();
+                customerQuery = customerQuery.Where(c =>
+                    (c.FirstName + " " + c.LastName).ToLower().Contains(fullName));
+            }
 
-            var customers = await custommerQuery.ToListAsync();
-            ViewBag.TotalCustomers = customers.Count;
-            return View(customers);
+            ViewBag.CurrentSorting = sorting;
+            ViewBag.CurrentFullName = fullName;
+            ViewBag.TotalCustomers = await customerQuery.CountAsync();
+
+            int pageSize = 5;
+
+            var paginatedCustomers = await PaginatedList<Customer>.CreateAsync(
+                customerQuery.AsNoTracking(),
+                pageNumber ?? 1,
+                pageSize
+            );
+
+            return View(paginatedCustomers);
         }
 
         // GET: Customers/Details/5
