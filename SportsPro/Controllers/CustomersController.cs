@@ -80,6 +80,7 @@ namespace SportsPro.Controllers
 
             ViewBag.CurrentSorting = sorting;
             ViewBag.CurrentFullName = fullName;
+            ViewBag.CurrentGender = gender;
             ViewBag.TotalCustomers = await customerQuery.CountAsync();
 
             int pageSize = 5;
