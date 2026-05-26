@@ -44,6 +44,10 @@ namespace SportsPro.Models
 
         public string? Phone { get; set; }
 
+        [Required(ErrorMessage = "Choose the gender")]
+
+        public string? Gender { get; set; }
+
         public string FullName => FirstName?.Replace(' ', '-') + " " + LastName?.Replace(' ', '-');
 
     }

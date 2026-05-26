@@ -23,6 +23,10 @@ namespace SportsPro.Models
         [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
         public string? Phone { get; set; }
 
+
+        [Required(ErrorMessage = "Choose the gender")]
+        public string? Gender { get; set; }
+
         public string FullName
         {
             get
