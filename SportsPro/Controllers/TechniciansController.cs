@@ -20,7 +20,7 @@ namespace SportsPro.Controllers
         }
 
         // GET: Technicians
-        public async Task<IActionResult> Index(string? sortBy, string? search, int? pageNumber)
+        public async Task<IActionResult> Index(string? sortBy, string? search, int? pageNumber, string? gender)
         {
             IQueryable<Technician> techQuery = _context.Technicianes;
 
@@ -47,8 +47,14 @@ namespace SportsPro.Controllers
                     (t.FirstName + " " + t.LastName).ToLower().Contains(search));
             }
 
+            if(!string.IsNullOrEmpty(gender))
+            {
+                techQuery = techQuery.Where(t => t.Gender == gender);
+            }
+
             ViewBag.CurrentSortBy = sortBy;
             ViewBag.CurrentSearch = search;
+            ViewBag.CurrentGender = gender;
             ViewBag.TotalTechnicians = await techQuery.CountAsync();
 
             int pageSize = 5;

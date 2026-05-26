@@ -77,17 +77,28 @@
     </div>
 
     
-<div class="form-group mt-3">
-    <select id="gender" name="gender" class="form-control">
+    <div class="form-group mt-3">
+        <select id="gender" name="genderfiltering" class="form-control">
             <option value="">All</option>
-            <option value="Male" selected="@(ViewBag.CurrentFiltering == "Male" ? "selected" : null)">Male</option>
-            <option value="Female" selected="@(ViewBag.CurrentFiltering == "Female" ? "selected" : null)">Female</option>
-            <option value="Other" selected="@(ViewBag.CurrentFiltering == "Other" ? "selected" : null)">Other</option>
-    </select>
-</div>
+
+            <option value="Male"
+                    selected="@(ViewBag.CurrentFiltering == "Male")">
+                Male
+            </option>
+
+            <option value="Female"
+                    selected="@(ViewBag.CurrentFiltering == "Female")">
+                Female
+            </option>
+
+            <option value="Other"
+                    selected="@(ViewBag.CurrentFiltering == "Other")">
+                Other
+            </option>
+        </select>
+    </div>
 
     <br />
-    <button type="submit" class="btn btn-secondary">Apply</button>
 </form>
 
 <br />
@@ -150,6 +161,9 @@ else
 <script>
     var sortForm = document.getElementById("sorting");
 
+    var gender = document.getElementById("gender");
+    
+
     if (sortForm) {
         var options = document.querySelectorAll("input[type=radio]");
 
@@ -159,6 +173,18 @@ else
             });
         });
     }
+
+     if (gender) {
+        gender.addEventListener("change", function () {
+            sortForm.submit();
+        });
+    }
+
+    
+
+   
+
+
     else {
         console.log("Error");
     }

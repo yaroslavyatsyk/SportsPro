@@ -59,7 +59,18 @@
     </div>
 
     <br />
-    <button type="submit" class="btn btn-secondary">Apply</button>
+   
+    <div class="form-group">
+
+        <select id="genderfilter" name="genderfiltering" class="form-control">
+
+            <option value="">All</option>
+            <option value="Male" selected="@(ViewBag.CurrentGender == "Male" ? "selected": "")">Male</option>
+            <option value="Female" selected="@(ViewBag.CurrentGender == "Female" ? "selected" : "")">Female</option>
+            <option value="Other" selected="@(ViewBag.CurrentGender == "Other" ? "selected" : "")">Other</option>
+
+        </select>
+    </div>
 </form>
 
 <br />
@@ -123,11 +134,16 @@ else
     document.addEventListener("DOMContentLoaded", function () {
         const form = document.getElementById("filtersForm");
         const radios = document.querySelectorAll("input[type=radio]");
+        const filtering = document.getElementById("genderfilter");
 
         radios.forEach(radio => {
             radio.addEventListener("change", function () {
                 form.submit();
             });
+        });
+
+        filtering.addEventListener("change", function () {
+            form.submit();
         });
     });
 </script>
