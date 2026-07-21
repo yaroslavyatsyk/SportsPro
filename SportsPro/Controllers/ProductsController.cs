@@ -22,12 +22,12 @@ namespace SportsPro.Controllers
         // GET: Products
         public async Task<IActionResult> Index(string? sortBy, string? search, int? pageNumber)
         {
-            IQueryable<Product> productQuery = _context.Products;
+            IQueryable<Product> productQuery = _context.Products.AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                search = search.Trim().ToLower();
-                productQuery = productQuery.Where(p => p.Name.ToLower().Contains(search));
+                var loweredSearch = search.Trim().ToLower();
+                productQuery = productQuery.Where(p => p.Name.ToLower().Contains(loweredSearch));
             }
 
             if (!string.IsNullOrWhiteSpace(sortBy))
