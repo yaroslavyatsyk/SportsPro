@@ -22,7 +22,7 @@ namespace SportsPro.Controllers
         // GET: Technicians
         public async Task<IActionResult> Index(string? sortBy, string? search, int? pageNumber, string? gender)
         {
-            IQueryable<Technician> techQuery = _context.Technicianes;
+            IQueryable<Technician> techQuery = _context.Technicianes.AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(sortBy))
             {
@@ -42,9 +42,9 @@ namespace SportsPro.Controllers
 
             if (!string.IsNullOrWhiteSpace(search))
             {
-                search = search.Trim().ToLower();
+               var loweredSearch = search.Trim().ToLower();
                 techQuery = techQuery.Where(t =>
-                    (t.FirstName + " " + t.LastName).ToLower().Contains(search));
+                    (t.FirstName + " " + t.LastName).ToLower().Contains(loweredSearch));
             }
 
             if(!string.IsNullOrEmpty(gender))
