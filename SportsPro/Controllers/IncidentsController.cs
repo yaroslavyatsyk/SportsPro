@@ -22,7 +22,7 @@ namespace SportsPro.Controllers
         // GET: Incidents
         public async Task<IActionResult> Index(string? filtering, string? sorting, int? pageNumber)
         {
-            IQueryable<Incident> incidentsQuery = _context.Incidents
+            IQueryable<Incident> incidentsQuery = _context.Incidents.AsNoTracking()
                 .Include(i => i.Customer)
                 .Include(i => i.Product)
                 .Include(i => i.Technician);
@@ -72,11 +72,15 @@ namespace SportsPro.Controllers
                         break;
 
                     case "Technician (A-Z)":
-                        incidentsQuery = incidentsQuery.OrderBy(i => i.Technician.FullName);
+                        incidentsQuery = incidentsQuery
+        .OrderBy(i => i.Technician.LastName)
+        .ThenBy(i => i.Technician.FirstName);
                         break;
 
                     case "Technician (Z-A)":
-                        incidentsQuery = incidentsQuery.OrderByDescending(i => i.Technician.FullName);
+                        incidentsQuery = incidentsQuery
+                            .OrderByDescending(i => i.Technician.LastName)
+                            .ThenByDescending(i => i.Technician.FirstName);
                         break;
 
                     case "DateOpened (A-Z)":
