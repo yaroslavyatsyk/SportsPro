@@ -47,16 +47,7 @@ namespace SportsPro.Controllers
         // GET: Customers/Create
         public async Task<IActionResult> Create()
         {
-            ViewBag.Countries = await _countryService.using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace SportsPro.Services
-{
-    public interface ICountryService
-    {
-        Task<List<string>> GetCountriesAsync();
-    }
-}();
+            ViewBag.Countries = await _countryService.GetCountriesAsync();
             return View();
         }
 
