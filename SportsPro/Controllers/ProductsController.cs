@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
-using SportsPro.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,17 +12,17 @@ namespace SportsPro.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly IProductRepository _productRepository;
+        private readonly SportContext _context;
 
-        public ProductsController(IProductRepository productRepository)
+        public ProductsController(SportContext context)
         {
-            _productRepository = productRepository;
+            _context = context;
         }
 
         // GET: Products
         public async Task<IActionResult> Index(string? sortBy, string? search, int? pageNumber)
         {
-            IQueryable<Product> productQuery = _productRepository.GetQueryable();
+            IQueryable<Product> productQuery = _context.Products.AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -72,13 +71,13 @@ namespace SportsPro.Controllers
             ViewBag.CurrentSortBy = sortBy;
             ViewBag.CurrentSearch = search;
 
-            ViewBag.TotalProducts = await _productRepository.CountAsync(productQuery);
-            ViewBag.TotalPrice = await _productRepository.SumPriceAsync(productQuery);
+            ViewBag.TotalProducts = await productQuery.CountAsync();
+            ViewBag.TotalPrice = await productQuery.SumAsync(p => p.Price);
 
             int pageSize = 5;
 
             var paginatedProducts = await PaginatedList<Product>.CreateAsync(
-                productQuery,
+                productQuery.AsNoTracking(),
                 pageNumber ?? 1,
                 pageSize
             );
@@ -94,7 +93,8 @@ namespace SportsPro.Controllers
                 return NotFound();
             }
 
-            var product = await _productRepository.GetByIdAsync(id.Value);
+            var product = await _context.Products
+                .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return NotFound();
@@ -116,16 +116,21 @@ namespace SportsPro.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductId,ProductCode,Name,ReleaseDate,Price")] Product product)
         {
+
             if (ModelState.IsValid)
             {
-                await _productRepository.AddAsync(product);
-                await _productRepository.SaveChangesAsync();
+
+                _context.Add(product);
+                await _context.SaveChangesAsync();
                 TempData["Message"] = "Successfully added!";
                 return RedirectToAction(nameof(Index));
+
             }
             else
             {
                 TempData["Message"] = "Something wrong, please try again!";
+
+
             }
             return View(product);
         }
@@ -138,7 +143,7 @@ namespace SportsPro.Controllers
                 return NotFound();
             }
 
-            var product = await _productRepository.GetByIdAsync(id.Value);
+            var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -162,12 +167,13 @@ namespace SportsPro.Controllers
             {
                 try
                 {
-                    _productRepository.Update(product);
-                    await _productRepository.SaveChangesAsync();
+                    _context.Update(product);
+                    await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await _productRepository.ExistsAsync(product.ProductId))
+                    if (!ProductExists(product.ProductId))
                     {
                         return NotFound();
                     }
@@ -182,6 +188,7 @@ namespace SportsPro.Controllers
             else
             {
                 TempData["Message"] = "Something wrong, please try again!";
+
             }
             return View(product);
         }
@@ -194,7 +201,8 @@ namespace SportsPro.Controllers
                 return NotFound();
             }
 
-            var product = await _productRepository.GetByIdAsync(id.Value);
+            var product = await _context.Products
+                .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return NotFound();
@@ -208,15 +216,18 @@ namespace SportsPro.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _productRepository.GetByIdAsync(id);
-            if (product != null)
-            {
-                _productRepository.Remove(product);
-                await _productRepository.SaveChangesAsync();
-            }
+            var product = await _context.Products.FindAsync(id);
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
             TempData["Message"] = "Successfully deleted!";
             return RedirectToAction(nameof(Index));
         }
+
+        private bool ProductExists(int id)
+        {
+            return _context.Products.Any(e => e.ProductId == id);
+        }
+
     }
 }
-}
+
