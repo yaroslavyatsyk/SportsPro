@@ -24,7 +24,7 @@ namespace SportsPro.Controllers
         // GET: Customers
         public async Task<IActionResult> Index(string? sorting, string? fullName, int? pageNumber, string? gender)
         {
-            IQueryable<Customer> customerQuery = _context.Customers;
+            IQueryable<Customer> customerQuery = _context.Customers.AsNoTracking();
 
             if (!string.IsNullOrWhiteSpace(sorting))
             {
@@ -66,9 +66,9 @@ namespace SportsPro.Controllers
 
             if (!string.IsNullOrWhiteSpace(fullName))
             {
-                fullName = fullName.Trim().ToLower();
+               var loweredFullName = fullName.Trim().ToLower();
                 customerQuery = customerQuery.Where(c =>
-                    (c.FirstName + " " + c.LastName).ToLower().Contains(fullName));
+                    (c.FirstName + " " + c.LastName).ToLower().Contains(loweredFullName));
             }
 
             if (!string.IsNullOrWhiteSpace(gender))
