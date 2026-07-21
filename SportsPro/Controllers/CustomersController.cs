@@ -1,95 +1,34 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using SportsPro.Models;
+using SportsPro.Repositories;
+using SportsPro.Services;
 
 namespace SportsPro.Controllers
 {
     public class CustomersController : Controller
     {
-        private readonly SportContext _context;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly ICountryService _countryService;
 
-        public CustomersController(SportContext context)
+        public CustomersController(ICustomerRepository customerRepository, ICountryService countryService)
         {
-            _context = context;
+            _customerRepository = customerRepository;
+            _countryService = countryService;
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index(string? sorting, string? fullName, int? pageNumber, string? gender)
+        public async Task<IActionResult> Index(string sorting, string fullName, int? pageNumber, string gender)
         {
-            IQueryable<Customer> customerQuery = _context.Customers.AsNoTracking();
-
-            if (!string.IsNullOrWhiteSpace(sorting))
-            {
-                switch (sorting)
-                {
-                    case "FirstNameASC":
-                        customerQuery = customerQuery.OrderBy(c => c.FirstName);
-                        break;
-                    case "FirstNameDESC":
-                        customerQuery = customerQuery.OrderByDescending(c => c.FirstName);
-                        break;
-                    case "LastNameASC":
-                        customerQuery = customerQuery.OrderBy(c => c.LastName);
-                        break;
-                    case "LastNameDESC":
-                        customerQuery = customerQuery.OrderByDescending(c => c.LastName);
-                        break;
-                    case "CityASC":
-                        customerQuery = customerQuery.OrderBy(c => c.City);
-                        break;
-                    case "CityDESC":
-                        customerQuery = customerQuery.OrderByDescending(c => c.City);
-                        break;
-                    case "StateASC":
-                        customerQuery = customerQuery.OrderBy(c => c.State);
-                        break;
-                    case "StateDESC":
-                        customerQuery = customerQuery.OrderByDescending(c => c.State);
-                        break;
-                    default:
-                        customerQuery = customerQuery.OrderBy(c => c.FirstName);
-                        break;
-                }
-            }
-            else
-            {
-                customerQuery = customerQuery.OrderBy(c => c.FirstName);
-            }
-
-            if (!string.IsNullOrWhiteSpace(fullName))
-            {
-               var loweredFullName = fullName.Trim().ToLower();
-                customerQuery = customerQuery.Where(c =>
-                    (c.FirstName + " " + c.LastName).ToLower().Contains(loweredFullName));
-            }
-
-            if (!string.IsNullOrWhiteSpace(gender))
-            {
-
-                customerQuery = customerQuery.Where(c => c.Gender == gender);
-
-            }
-
             ViewBag.CurrentSorting = sorting;
             ViewBag.CurrentFullName = fullName;
             ViewBag.CurrentGender = gender;
-            ViewBag.TotalCustomers = await customerQuery.CountAsync();
+            ViewBag.TotalCustomers = await _customerRepository.GetCustomerCountAsync(fullName, gender);
 
             int pageSize = 5;
-
-            var paginatedCustomers = await PaginatedList<Customer>.CreateAsync(
-                customerQuery.AsNoTracking(),
-                pageNumber ?? 1,
-                pageSize
-            );
+            var paginatedCustomers = await _customerRepository.GetCustomersAsync(
+                sorting, fullName, gender, pageNumber ?? 1, pageSize);
 
             return View(paginatedCustomers);
         }
@@ -97,130 +36,103 @@ namespace SportsPro.Controllers
         // GET: Customers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
+            var customer = await _customerRepository.GetByIdAsync(id.Value);
+            if (customer == null) return NotFound();
 
             return View(customer);
         }
 
         // GET: Customers/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            List<string> countriesList = getCountries();
+            ViewBag.Countries = await _countryService.using System.Collections.Generic;
+using System.Threading.Tasks;
 
-
-            ViewBag.Countries = countriesList;
-
-
-
-          
-            
-           
+namespace SportsPro.Services
+{
+    public interface ICountryService
+    {
+        Task<List<string>> GetCountriesAsync();
+    }
+}();
             return View();
         }
 
         // POST: Customers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName,City,State,PostalCode,Country,Email,Phone")] Customer customer)
+        public async Task<IActionResult> Create(
+            [Bind("CustomerId,FirstName,LastName,City,State,PostalCode,Country,Email,Phone")] Customer customer)
         {
-        
             if (ModelState.IsValid)
             {
-                if(String.IsNullOrEmpty(customer.State))
+                if (string.IsNullOrEmpty(customer.State))
                 {
                     customer.State = "Non Applicable";
                 }
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
+
+                await _customerRepository.AddAsync(customer);
                 TempData["Message"] = "Customer has been added successfully";
                 return RedirectToAction(nameof(Index));
             }
-         
+
+            ViewBag.Countries = await _countryService.GetCountriesAsync();
             return View(customer);
         }
-
 
         // GET: Customers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            List<string> countriesList = getCountries();
-            ViewBag.Countries = countriesList;
+            ViewBag.Countries = await _countryService.GetCountriesAsync();
 
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
+            var customer = await _customerRepository.GetByIdAsync(id.Value);
+            if (customer == null) return NotFound();
+
             return View(customer);
         }
 
         // POST: Customers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,FirstName,LastName,City,State,PostalCode,Country,Email,Phone")] Customer customer)
+        public async Task<IActionResult> Edit(
+            int id, [Bind("CustomerId,FirstName,LastName,City,State,PostalCode,Country,Email,Phone")] Customer customer)
         {
-            if (id != customer.CustomerId)
-            {
-                return NotFound();
-            }
+            if (id != customer.CustomerId) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
+                    await _customerRepository.UpdateAsync(customer);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Microsoft.EntityFrameworkCore.DbUpdateConcurrencyException)
                 {
-                    if (!CustomerExists(customer.CustomerId))
+                    if (!await _customerRepository.ExistsAsync(customer.CustomerId))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
+
                 TempData["Message"] = "Customer has been updated successfully";
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Countries = await _countryService.GetCountriesAsync();
             return View(customer);
         }
 
         // GET: Customers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.CustomerId == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
+            var customer = await _customerRepository.GetByIdAsync(id.Value);
+            if (customer == null) return NotFound();
 
             return View(customer);
         }
@@ -230,35 +142,9 @@ namespace SportsPro.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
+            await _customerRepository.DeleteAsync(id);
             TempData["Message"] = "Customer has been deleted successfully";
             return RedirectToAction(nameof(Index));
         }
-
-        private bool CustomerExists(int id)
-        {
-            return _context.Customers.Any(e => e.CustomerId == id);
-        }
-
-        private List<string> getCountries()
-        {
-            var data = new WebClient().DownloadString("https://restcountries.com/v3.1/all?fields=name,capital,currencies");
-            dynamic json = JsonConvert.DeserializeObject(data);
-            List<string> listOfCountries = new List<string>();
-            foreach (var jsonObject in json)
-            {
-                if ((string)jsonObject.name.common != "Russia")
-                    listOfCountries.Add((string)jsonObject.name.common); 
-
-            }
-            listOfCountries.Sort();
-            return listOfCountries;
-        }
-       
-      
-
-
     }
 }
